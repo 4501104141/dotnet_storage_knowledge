@@ -1,0 +1,9 @@
+=> Khi so sánh 2 object trong context thì phải đảm bảo cả 2 context không được AsNoTracking.
+
+Phương thức object.Remove, object.Add thì khi 1 trong 2 entity có AsNoTracking thì không saveChange được hoặc bị lỗi?
+context.object.Add(object); thì nếu object đó gán bằng một object có AsNoTracking thì không saveChanges được và văng lỗi database.
+saveChanges update cho một object có thuộc tính là object gán bằng cho một object có AsNoTracking thì vẫn update được.
+
+Tại sao AsNoTracking() gây ra vấn đề khi so sánh?
+Không theo dõi thực thể: Khi bạn sử dụng AsNoTracking(), context không giữ thông tin về trạng thái của các thực thể được truy vấn. Điều này có nghĩa là mỗi lần bạn truy vấn, Entity Framework sẽ tạo ra các thực thể mới, ngay cả khi chúng đại diện cho cùng một hàng trong cơ sở dữ liệu.
+So sánh thực thể: Khi bạn so sánh hai thực thể không được theo dõi, Entity Framework không thể xác định rằng chúng đại diện cho cùng một hàng trong cơ sở dữ liệu, vì chúng là các đối tượng khác nhau trong bộ nhớ.
