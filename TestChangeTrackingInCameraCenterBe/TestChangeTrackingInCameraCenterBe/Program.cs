@@ -1,21 +1,16 @@
+using CameraCenterBe.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using TestSchool.Apis;
-using TestSchool.Model;
+using Serilog;
+using TestChangeTrackingInCameraCenterBe.Apis;
 
-namespace TestSchool;
+namespace TestChangeTrackingInCameraCenterBe;
 
 public class Program
 {
-    public static MySchool api_school = new MySchool();
-    public static MyStudent api_student = new MyStudent();
-    public static MyTeacher api_teacher = new MyTeacher();
-    public static MyClass api_class = new MyClass();
-    public static MyStateClass api_stateClasses = new MyStateClass();
-    public static MyJson api_json = new MyJson();
-    public static async Task Main(string[] args)
+    public static MyTest api_test = new MyTest();
+    public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration().MinimumLevel
                                               .Information()
@@ -27,10 +22,10 @@ public class Program
 
             builder.WebHost.ConfigureKestrel((context, option) =>
             {
-                option.ListenAnyIP(50002, listenOptions =>
+                option.ListenAnyIP(50000, listenOptions =>
                 {
                 });
-                option.ListenAnyIP(50003, listenOptions =>
+                option.ListenAnyIP(50001, listenOptions =>
                 {
                 });
                 option.Limits.MaxConcurrentConnections = null;
@@ -51,13 +46,14 @@ public class Program
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllers();
 
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            string version = "20241213_v1"; // yyyyMMdd port 50000, do not copy and none for all file
+            string version = "20250206_v1"; // yyyyMMdd // port 50000 and 500001, sslkey.pfx, do not copy and none for all file
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
-                    Title = string.Format("{0} {1}", "TestSchool", version),
+                    Title = string.Format("{0} {1}", "TestChangeTrackingInCameraCenterBe", version),
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -86,6 +82,7 @@ public class Program
                     }
                 });
             });
+
             var app = builder.Build();
 
             app.UseSwagger();
@@ -94,18 +91,13 @@ public class Program
             app.UseDeveloperExceptionPage();
             app.UseMigrationsEndPoint();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                IServiceProvider services = scope.ServiceProvider;
-                DataContext datacontext = services.GetRequiredService<DataContext>();
-                datacontext.Database.EnsureCreated();
-                //await datacontext.Database.MigrateAsync();
-            }
             app.UseCors("HTTPSystem");
             app.UseRouting();
             app.UseAuthorization();
             app.MapControllers();
-            app.MapGet("/", () => "WebApplication of STVG");
+
+            app.MapGet("/", () => "TestChangeTrackingInCameraCenterBe of STVG");
+
             app.Run();
         }
         catch (Exception ex)

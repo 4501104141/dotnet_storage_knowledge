@@ -162,7 +162,7 @@ public class MyStudent
         }
     }
 
-    public int Create(string student, string school)
+    public string Create(string student, string school)
     {
         try
         {
@@ -171,7 +171,7 @@ public class MyStudent
                 SqlStudent? sql_student = context.students!.Where(s => s.code.CompareTo(student) == 0).AsNoTracking().FirstOrDefault();
                 if (sql_student != null)
                 {
-                    return -1;
+                    return "Student is exist";
                 }
                 SqlSchool? sql_school = null;
                 //khi AsNoTracking thì không Add được?
@@ -180,7 +180,7 @@ public class MyStudent
                     sql_school = context.schools!.Where(s => s.code.CompareTo(school) == 0).FirstOrDefault();
                     if (sql_school == null)
                     {
-                        return -2;
+                        return "School is not exist";
                     }
                 }
                 sql_student = new SqlStudent();
@@ -189,17 +189,17 @@ public class MyStudent
                 sql_student.school = sql_school;
                 context.students!.Add(sql_student);
                 context.SaveChanges();
-                return 0;
+                return string.Empty;
             }
         }
         catch (Exception ex)
         {
             Log.Error(ex.ToString());
-            return -9;
+            return "Error database";
         }
     }
 
-    public int Edit(string student, string school)
+    public string Edit(string student, string school)
     {
         try
         {
@@ -208,26 +208,26 @@ public class MyStudent
                 SqlStudent? sql_student = context.students!.Where(s => s.code.CompareTo(student) == 0).FirstOrDefault();
                 if (sql_student == null)
                 {
-                    return -1;
+                    return "Student is not exist";
                 }
                 SqlSchool? sql_school = context.schools!.Where(s => s.code.CompareTo(school) == 0).AsNoTracking().FirstOrDefault();
                 if (sql_school == null)
                 {
-                    return -2;
+                    return "School is not exist";
                 }
                 sql_student.school = sql_school;
                 context.SaveChanges();
-                return 0;
+                return string.Empty;
             }
         }
         catch (Exception ex)
         {
             Log.Error(ex.ToString());
-            return -9;
+            return "Error database";
         }
     }
 
-    public int Delete(string student)
+    public string Delete(string student)
     {
         try
         {
@@ -236,21 +236,21 @@ public class MyStudent
                 SqlStudent? sql_student = context.students!.Where(s => s.code.CompareTo(student) == 0).FirstOrDefault();
                 if (sql_student == null)
                 {
-                    return -1;
+                    return "Student is not exist";
                 }
                 sql_student.isdeleted = true;
                 context.SaveChanges();
-                return 0;
+                return string.Empty;
             }
         }
         catch (Exception ex)
         {
             Log.Error(ex.ToString());
-            return -9;
+            return "Error database";
         }
     }
 
-    public int DeleteStudentBySchool(string student, string school)
+    public string DeleteStudentBySchool(string student, string school)
     {
         try
         {
@@ -262,17 +262,17 @@ public class MyStudent
                     .FirstOrDefault();
                 if (sql_student == null)
                 {
-                    return -1;
+                    return "Student is not exist";
                 }
                 context.students!.Remove(sql_student);
                 context.SaveChanges();
-                return 0;
+                return string.Empty;
             }
         }
         catch (Exception ex)
         {
             Log.Error(ex.ToString());
-            return -9;
+            return "Error database";
         }
     }
 }

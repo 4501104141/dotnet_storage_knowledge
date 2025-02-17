@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Serilog;
+using System.Globalization;
 using TestSchool.Apis;
 using static TestSchool.Apis.MySchool;
 
@@ -52,30 +53,14 @@ public class StudentController : ControllerBase
     {
         try
         {
-            int result = Program.api_student.Create(item.code, item.school);
-            if (result >= 0)
+            string result = Program.api_student.Create(item.code, item.school);
+            if (string.IsNullOrEmpty(result))
             {
                 return Ok();
             }
             else
             {
-                string tmp = "";
-                switch (result)
-                {
-                    case -1:
-                        tmp = "Student is exist";
-                        break;
-                    case -2:
-                        tmp = "School is not exist";
-                        break;
-                    case -9:
-                        tmp = "Error database";
-                        break;
-                    default:
-                        tmp = string.Format("Code error: {0}", result);
-                        break;
-                }
-                return BadRequest(tmp);
+                return BadRequest(result);
             }
         }
         catch (Exception ex)
@@ -96,30 +81,14 @@ public class StudentController : ControllerBase
     {
         try
         {
-            int result = Program.api_student.Edit(student, item.school);
-            if (result >= 0)
+            string result = Program.api_student.Edit(student, item.school);
+            if (string.IsNullOrEmpty(result))
             {
                 return Ok();
             }
             else
             {
-                string tmp = "";
-                switch (result)
-                {
-                    case -1:
-                        tmp = "Student is not exist";
-                        break;
-                    case -2:
-                        tmp = "School is not exist";
-                        break;
-                    case -9:
-                        tmp = "Error database";
-                        break;
-                    default:
-                        tmp = string.Format("Code error: {0}", result);
-                        break;
-                }
-                return BadRequest(tmp);
+                return BadRequest(result);
             }
         }
         catch (Exception ex)
@@ -135,27 +104,14 @@ public class StudentController : ControllerBase
     {
         try
         {
-            int result = Program.api_student.DeleteStudentBySchool(student, school);
-            if (result >= 0)
+            string result = Program.api_student.DeleteStudentBySchool(student, school);
+            if (string.IsNullOrEmpty(result))
             {
                 return Ok();
             }
             else
             {
-                string tmp = "";
-                switch (result)
-                {
-                    case -1:
-                        tmp = "Student is not exist";
-                        break;
-                    case -9:
-                        tmp = "Error database";
-                        break;
-                    default:
-                        tmp = string.Format("Code error: {0}", result);
-                        break;
-                }
-                return BadRequest(tmp);
+                return BadRequest(result);
             }
         }
         catch (Exception ex)
@@ -171,27 +127,14 @@ public class StudentController : ControllerBase
     {
         try
         {
-            int result = Program.api_student.Delete(student);
-            if (result >= 0)
+            string result = Program.api_student.Delete(student);
+            if (string.IsNullOrEmpty(result))
             {
                 return Ok();
             }
             else
             {
-                string tmp = "";
-                switch (result)
-                {
-                    case -1:
-                        tmp = "Student is not exist";
-                        break;
-                    case -9:
-                        tmp = "Error database";
-                        break;
-                    default:
-                        tmp = string.Format("Code error: {0}", result);
-                        break;
-                }
-                return BadRequest(tmp);
+                return BadRequest(result);
             }
         }
         catch (Exception ex)
