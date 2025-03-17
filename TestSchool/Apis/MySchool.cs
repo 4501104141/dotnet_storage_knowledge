@@ -439,4 +439,32 @@ public class MySchool
             return -9;
         }
     }
+
+    public string addStudentToSchool(string student, string school)
+    {
+        try
+        {
+            using (DataContext context = new DataContext())
+            {
+                SqlStudent? sql_student = context.students!.Where(s => s.isdeleted == false && s.code.CompareTo(student) == 0).FirstOrDefault();
+                if (sql_student == null)
+                {
+                    return "Student is not exist";
+                }
+                SqlSchool? sql_school = context.schools!.Where(s => s.isdeleted == false && s.code.CompareTo(school) == 0).FirstOrDefault();
+                if (sql_school == null)
+                {
+                    return "School is not exist";
+                }
+                sql_school.students.Add(sql_student);
+                context.SaveChanges();
+                return string.Empty;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex.ToString());
+            return "Error controller";
+        }
+    }
 }

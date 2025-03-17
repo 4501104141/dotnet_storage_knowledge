@@ -201,4 +201,24 @@ public class SchoolController : ControllerBase
             return BadRequest("Error controller");
         }
     }
+
+    [HttpPut]
+    [Route("{school}/add/student/{student}")]
+    public IActionResult addStudentToSchool(string school, string student)
+    {
+        try
+        {
+            string result = Program.api_school.addStudentToSchool(student, school);
+            if(string.IsNullOrEmpty(result))
+            {
+                return Ok();
+            }
+            return BadRequest(result);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex.ToString());
+            return BadRequest("Error controller");
+        }
+    }
 }

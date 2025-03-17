@@ -15,6 +15,7 @@ public class Program
     public static MyClass api_class = new MyClass();
     public static MyStateClass api_stateClasses = new MyStateClass();
     public static MyJson api_json = new MyJson();
+    public static MyOrder api_order = new MyOrder();
     public static async Task Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration().MinimumLevel
